@@ -169,3 +169,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Template zip folder
+feane-1.0.0.zip

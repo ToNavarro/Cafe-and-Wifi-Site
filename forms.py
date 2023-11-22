@@ -3,7 +3,9 @@ from wtforms import StringField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, URL, Email
 
 
-class CafeForm(FlaskForm):
+# Form to add a Cafe to the DATABASE
+# TODO: Make available only for admin (when authentication is set up)
+class CafeFormDataBase(FlaskForm):
     cafe = StringField('Cafe name', validators=[DataRequired(message="Required")])
     location = StringField('Location', validators=[DataRequired(message="Required"), URL(message="Enter valid URL")])
     open_time = StringField('Open', validators=[DataRequired(message="Required")])
@@ -30,3 +32,11 @@ class ContactForm(FlaskForm):
     message = TextAreaField(label="Message", validators=[DataRequired("Required Field.")],
                             render_kw={"placeholder": "What do you want to tell me?"})
     submit = SubmitField("Send Message")
+
+
+class CafeForm(FlaskForm):
+    cafe = StringField('Cafe name', validators=[DataRequired(message="Required")])
+    location = StringField('Location', validators=[DataRequired(message="Required"), URL(message="Enter valid URL")])
+    description = TextAreaField('Why Add?', validators=[DataRequired(message="Required")],
+                                render_kw={"placeholder": "Tell us why do you think we should add this Cafe."})
+    submit = SubmitField('Suggest Cafe')

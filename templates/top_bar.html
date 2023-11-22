@@ -1,0 +1,44 @@
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container fixed-top"
+             style="background-image: url('{{ url_for('static', filename='assets/images/hero-bg.jpg') }}')">
+
+          <div class="container-fluid pb-2 pt-2">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+              <span>
+                CBA´s Cafes Site
+              </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""> </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav  mx-auto ">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('home') }}"><i class="fa fa-house-door" aria-hidden="true"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('get_all') }}"><i class="fa fa-search" aria-hidden="true"></i> Cafes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('about') }}"><i class="fa fa-user" aria-hidden="true"></i> About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('add_cafe') }}"><i class="fa fa-plus-circle" aria-hidden="true"></i> New Cafe
+                  </a>
+                </li>
+              </ul>
+              <div class="user_option">
+                <a href="{{ url_for('get_random') }}" class="order_online">
+                  Random Cafe
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->

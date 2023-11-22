@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
 import os
@@ -12,7 +12,7 @@ dotenv_path = find_dotenv()
 load_dotenv()
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
 db = SQLAlchemy()
 db.init_app(app)
@@ -67,10 +67,16 @@ def get_random():
                          })
 
 
-@app.route("/all")
+@app.route("/cafes")
 def get_all():
     all_cafes = db.session.execute(db.select(Cafe).order_by(Cafe.name)).scalars().all()
-    return jsonify(cafe=[cafe.to_dict() for cafe in all_cafes])
+    # return jsonify(cafe=[cafe.to_dict() for cafe in all_cafes])
+    return render_template("cafes.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
 @app.route("/search")
@@ -135,13 +141,14 @@ def report_closed(cafe_id):
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        new_row = (f"{form.cafe.data},{form.location.data},{form.open_time.data},{form.close_time.data},"
-                   f"{form.coffee_rating.data},{form.wifi_rating.data},{form.p_sockets.data}")
-        print(new_row)
-        with open('cafe-data.csv', "a", encoding='utf-8') as csv_file:
-            csv_file.write(f"\n{new_row}")
+        new_cafe = f"{form.cafe.data}\n\n{form.location.data}\n\n{form.description.data}"
+        print(new_cafe)
+        flash("Cafe successfully suggested. Thanks for your collaboration.")
+        # with open('cafe-data.csv', "a", encoding='utf-8') as csv_file:
+        #     csv_file.write(f"\n{new_row}")
+        # TODO: Configure where to store the messages so admin can check and add Cafe to Database.
         return redirect(url_for('add_cafe'))
-    return render_template('add.html', form=form)
+    return render_template('book.html', form=form)
 
 
 if __name__ == "__main__":
