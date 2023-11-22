@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from random import choice
 import os
 from dotenv import load_dotenv, find_dotenv
+from forms import CafeForm, ContactForm
+from flask_bootstrap import Bootstrap4
 
 # Find .env file
 dotenv_path = find_dotenv()
@@ -14,6 +16,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI")
 db = SQLAlchemy()
 db.init_app(app)
+Bootstrap4(app)
+
 
 # Cafe TABLE Configuration
 class Cafe(db.Model):
@@ -79,6 +83,7 @@ def search():
         return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location"}), 404
 
 
+"""
 @app.route('/add', methods=["POST"])
 def add_cafe():
     new_cafe = Cafe(
@@ -96,6 +101,7 @@ def add_cafe():
     db.session.add(new_cafe)
     db.session.commit()
     return jsonify(response={"success": "Successfully added the new cafe."})
+"""
 
 
 @app.route('/update-price/<int:cafe_id>', methods=["PATCH"])
@@ -125,5 +131,22 @@ def report_closed(cafe_id):
         return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
 
 
+@app.route('/add', methods=["POST", "GET"])
+def add_cafe():
+    form = CafeForm()
+    if form.validate_on_submit():
+        new_row = (f"{form.cafe.data},{form.location.data},{form.open_time.data},{form.close_time.data},"
+                   f"{form.coffee_rating.data},{form.wifi_rating.data},{form.p_sockets.data}")
+        print(new_row)
+        with open('cafe-data.csv', "a", encoding='utf-8') as csv_file:
+            csv_file.write(f"\n{new_row}")
+        return redirect(url_for('add_cafe'))
+    return render_template('add.html', form=form)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# Bootstrap template from:
+# https://themewagon.com/themes/free-bootstrap-4-html5-restaurant-website-template-feane/
