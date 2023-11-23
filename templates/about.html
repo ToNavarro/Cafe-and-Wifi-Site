@@ -1,3 +1,4 @@
+{% from "bootstrap5/form.html" import render_form %}
 {% include "header.html" %}
 
 
@@ -9,7 +10,7 @@
       <div class="row">
         <div class="col-md-6 ">
           <div class="img-box">
-            <img src="static/assets/images/about-img.png" alt="">
+            <img src="static/assets/images/about-cafe.png" alt="">
           </div>
         </div>
         <div class="col-md-6">
@@ -20,16 +21,11 @@
               </h2>
             </div>
             <p>
-              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
-              in some form, by injected humour, or randomised words which don't look even slightly believable. If you
-              are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
-              the middle of text. All
+              A site for all cafe lovers to discover new venues but also giving some review on the ones visited so others know what to expect.
             </p>
-            <div class="btn-box">
-              <a href="">
-                Read More
-              </a>
-            </div>
+            <a href="">
+              Read More
+            </a>
           </div>
         </div>
       </div>
@@ -37,5 +33,34 @@
   </section>
 
   <!-- end about section -->
+
+ <!-- contact section -->
+
+  <section class="client_section layout_padding-bottom">
+    <div class="container mt-4">
+      <div class="heading_container heading_center psudo_white_primary mb_45">
+        <h2>
+          Contact Us
+        </h2>
+                        <!-- flash message when sent -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+            <p class="flash">{{ message }}</p>
+            {% endfor %}
+          {% else %}
+            <span class="subheading">Send us a message, and we will reach out to you.</span>
+          {% endif %}
+        {% endwith %}
+      </div>
+      <div class="row ">
+        <div class="form_container col-lg-6 mx-auto">
+            {{ render_form(form) }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end contact section -->
 
 {% include "footer.html" %}

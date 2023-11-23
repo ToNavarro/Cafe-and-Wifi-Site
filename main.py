@@ -46,7 +46,8 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    cafes = db.session.execute(db.select(Cafe)).scalars().all()
+    return render_template("index.html", all_cafes=cafes)
 
 
 @app.route("/random")
@@ -69,14 +70,23 @@ def get_random():
 
 @app.route("/cafes")
 def get_all():
-    all_cafes = db.session.execute(db.select(Cafe).order_by(Cafe.name)).scalars().all()
-    # return jsonify(cafe=[cafe.to_dict() for cafe in all_cafes])
-    return render_template("cafes.html")
+    cafes = db.session.execute(db.select(Cafe).order_by(Cafe.name)).scalars().all()
+    return render_template("cafes.html", all_cafes=cafes)
 
 
-@app.route("/about")
+@app.route("/about", methods=["GET", "POST"])
 def about():
-    return render_template("about.html")
+    form = ContactForm()
+    if form.validate_on_submit():
+        message = (f"From: {form.name.data} \n"
+                   f"Message: {form.message.data} \n"
+                   f"Email: {form.email.data} \n"
+                   f"Phone: {form.phone.data}")
+        print(message)
+        flash("Message successfully sent.")
+        redirect(url_for("about"))
+
+    return render_template("about.html", form=form)
 
 
 @app.route("/search")
